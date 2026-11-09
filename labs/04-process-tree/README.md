@@ -17,10 +17,10 @@
 Не получилось: всё получилось
 
 ## Снимки экрана
-![1. Начало дерева процессов](screenshots/01_tree_root.png)
-![2. Терминал и его родители](screenshots/02_terminal_parents.png)
-![3. Дочерний процесс терминала](screenshots/03_child.png)
-![4. Родитель по команде](screenshots/04_ppid_command.png)
-![5. Процессы браузера](screenshots/05_browser.png)
-![6. Процесс без родителя](screenshots/06_orphan_command.png)
-![7. Сирота в дереве](screenshots/07_orphan_tree.png)
+![1. Начало дерева процессов](sys1.png)
+![2. Терминал и его родители](sys2.png)
+![3. Дочерний процесс терминала](sys3.png)
+![4. Родитель по команде](sys4.png)
+![5. Процессы браузера](sys5.jpg)
+![6. Процесс без родителя](sys6.jpg)
+![7. Сирота в дереве](sys7.jpg)
