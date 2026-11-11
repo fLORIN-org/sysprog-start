@@ -10,6 +10,8 @@
 | [`03-libraries`](03-libraries/README.md) | [ЛР 3. Библиотеки программы](https://maximbytecamp.github.io/sysprog_makarov/temy/10-laboratornaya-3/index.html) | 3 |
 | [`04-process-tree`](04-process-tree/README.md) | [ЛР 4. Дерево процессов](https://maximbytecamp.github.io/sysprog_makarov/temy/13-laboratornaya-4/index.html) | 4 |
 | [`05-process-birth`](05-process-birth/README.md) | [ЛР 5. Рождение процесса](https://maximbytecamp.github.io/sysprog_makarov/temy/15-laboratornaya-5/index.html) | 5 |
+| [`06-cpu-load`](06-cpu-load/README.md) | [ЛР 6. Кто загружает процессор](https://maximbytecamp.github.io/sysprog_makarov/temy/17-laboratornaya-6/index.html) | 6 |
+| [`07-python-threads`](07-python-threads/README.md) | [ЛР 7. Потоки Python и GIL](https://maximbytecamp.github.io/sysprog_makarov/temy/19-laboratornaya-7/index.html) | 7 |
 
 ## Что лежит в папке работы
 

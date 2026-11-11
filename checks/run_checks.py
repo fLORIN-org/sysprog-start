@@ -43,7 +43,7 @@ AGENT_CHECKS = [
     (12, 21, "Подключено новое устройство"),
     (13, 22, "Запущена программа без подписи или не из пакета"),
 ]
-OPENED = 1  # сколько проверок агента уже открыто; растёт с каждой парой
+OPENED = 2  # сколько проверок агента уже открыто; растёт с каждой парой
 
 PID_LINE = re.compile(r"agent v0(?: \(python\))?, pid= ?\d+")
 
@@ -160,7 +160,7 @@ def check_lab03():
     return [("ЛР 3", "libs.c", "ошибка", f"нет строки «{LAB03_LINE}» в выводе")], False
 
 
-LABS = ("01-process-inside", "02-debugger", "03-libraries", "04-process-tree", "05-process-birth")
+LABS = ("01-process-inside", "02-debugger", "03-libraries", "04-process-tree", "05-process-birth", "06-cpu-load", "07-python-threads")
 PLACEHOLDER = b"sysprog-placeholder"  # метка в заглушках шаблона, у снимка её нет
 IMAGE_START = (b"\x89PNG", b"\xff\xd8\xff")
 
@@ -233,7 +233,7 @@ def build_core():
         return _core["result"]
     texts = {f: f.read_text(encoding="utf-8", errors="replace") for f in sorted(CORE.glob("*.c"))}
     texts = {f: t for f, t in texts.items() if "int main" not in t}
-    funcs = {name for name in ("core_get_info", "core_list_procs") if any(name in t for t in texts.values())}
+    funcs = {name for name in ("core_get_info", "core_list_procs", "core_proc_cpu") if any(name in t for t in texts.values())}
     other = [f.name for f, t in texts.items() if not fits_core(target_of_core(t))]
     if not texts:
         err = ("agent/core", "не сдано", "нет файлов ядра agent/core/*.c")
@@ -364,6 +364,63 @@ def check_agent1():
     return "пройдена", detail, True
 
 
+BUSY = "import time\nend = time.time() + 7\nwhile time.time() < end: pass"
+IDLE = "import time\ntime.sleep(7)"
+NO_PID = 2147483646  # такого номера нет ни в одной системе: в Windows номера кратны 4, в macOS и Linux не доходят до него
+
+
+def check_agent2():
+    """Проверка агента 2 (пара 6): по core_proc_cpu нагрузка процесса-нагрузчика больше 80%, спящего — меньше 10%.
+
+    Возвращает (результат, подробности, ok), как check_agent1.
+    """
+    import ctypes
+    import time
+    funcs, err = build_core()
+    if "core_proc_cpu" not in funcs:
+        return "не сдано", "нет agent/core/*.c с core_proc_cpu", True
+    if err:
+        return ("пропущено", err[2], True) if err[1] == "пропущено" else ("не пройдена", err[2], False)
+
+    class CoreCpu(ctypes.Structure):
+        _fields_ = [("user_us", ctypes.c_int64), ("kernel_us", ctypes.c_int64)]
+
+    try:
+        lib = ctypes.CDLL(str(CORE / LIB_NAME))
+        lib.core_proc_cpu.argtypes = [ctypes.c_int64, ctypes.POINTER(CoreCpu)]
+        lib.core_proc_cpu.restype = ctypes.c_int
+    except (OSError, AttributeError) as e:
+        return "не пройдена", f"библиотека не загружается: {e}"[:150], False
+
+    def used(pid):
+        cpu = CoreCpu()
+        code = lib.core_proc_cpu(pid, ctypes.byref(cpu))
+        return None if code != 0 else cpu.user_us + cpu.kernel_us
+
+    busy = subprocess.Popen([sys.executable, "-c", BUSY])
+    idle = subprocess.Popen([sys.executable, "-c", IDLE])
+    try:
+        time.sleep(1)
+        b0, i0, start = used(busy.pid), used(idle.pid), time.monotonic()
+        time.sleep(3)
+        b1, i1, wall = used(busy.pid), used(idle.pid), time.monotonic() - start
+    finally:
+        busy.kill(); idle.kill()
+        busy.wait(); idle.wait()
+    if None in (b0, b1, i0, i1):
+        return "не пройдена", "core_proc_cpu вернула ошибку для работающего процесса", False
+    if used(NO_PID) is not None:
+        return "не пройдена", f"для несуществующего процесса {NO_PID} core_proc_cpu вернула 0, ждали код ошибки", False
+    load_busy = round((b1 - b0) / (wall * 10_000))
+    load_idle = round((i1 - i0) / (wall * 10_000))
+    detail = f"нагрузка {load_busy}%, спящий процесс {load_idle}% за {wall:.1f} с"
+    if load_busy < 80:
+        return "не пройдена", detail + " — у нагрузки меньше 80%: проверьте единицы времени", False
+    if load_busy > 120 or load_idle > 10:
+        return "не пройдена", detail + " — числа больше настоящих: проверьте единицы времени", False
+    return "пройдена", detail, True
+
+
 def main():
     # Консоль Windows по умолчанию в cp1252: русский текст выводится в UTF-8.
     sys.stdout.reconfigure(encoding="utf-8")
@@ -376,6 +433,8 @@ def main():
     rows += rows2 + rows3 + rows6 + rows4 + rows5
     ok = ok and ok2 and ok3 and ok4 and ok5 and ok6
     agent = {1: check_agent1()}
+    if OPENED >= 2:
+        agent[2] = check_agent2()
     ok = ok and all(a_ok for _, _, a_ok in agent.values())
     passed = sum(state == "пройдена" for state, _, _ in agent.values())
     lines = [f"## Проверки · {SYSTEM_NAME}", "",

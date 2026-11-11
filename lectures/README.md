@@ -15,3 +15,5 @@
 | 1.3 | [n8n и Ollama: первая автоматизация](chapter-1-3-n8n-and-ollama.md) |
 | 2.1 | [Список процессов](chapter-2-1-process-list.md) |
 | 2.2 | [Запуск процесса](chapter-2-2-process-start.md) |
+| 2.3 | [Процессорное время](chapter-2-3-cpu-time.md) |
+| 2.4 | [Потоки](chapter-2-4-threads.md) |
