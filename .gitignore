@@ -24,3 +24,7 @@ Thumbs.db
 .vscode/
 # настройки отладки лабораторных сдаются вместе с работой (ЛР 2)
 !labs/*/.vscode/
+
+*.exp
+*.lib
+procs.txt
