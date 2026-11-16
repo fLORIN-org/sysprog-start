@@ -12,6 +12,8 @@
 | [`05-process-birth`](05-process-birth/README.md) | [ЛР 5. Рождение процесса](https://maximbytecamp.github.io/sysprog_makarov/temy/15-laboratornaya-5/index.html) | 5 |
 | [`06-cpu-load`](06-cpu-load/README.md) | [ЛР 6. Кто загружает процессор](https://maximbytecamp.github.io/sysprog_makarov/temy/17-laboratornaya-6/index.html) | 6 |
 | [`07-python-threads`](07-python-threads/README.md) | [ЛР 7. Потоки Python и GIL](https://maximbytecamp.github.io/sysprog_makarov/temy/19-laboratornaya-7/index.html) | 7 |
+| [`08-memory-map`](08-memory-map/README.md) | [ЛР 8. Карта памяти](https://maximbytecamp.github.io/sysprog_makarov/temy/21-laboratornaya-8/index.html) | 8 |
+| [`09-crash`](09-crash/README.md) | [ЛР 9. Разбор падения](https://maximbytecamp.github.io/sysprog_makarov/temy/22-laboratornaya-9/index.html) | 9 |
 
 ## Что лежит в папке работы
 

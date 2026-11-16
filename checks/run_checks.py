@@ -160,7 +160,7 @@ def check_lab03():
     return [("ЛР 3", "libs.c", "ошибка", f"нет строки «{LAB03_LINE}» в выводе")], False
 
 
-LABS = ("01-process-inside", "02-debugger", "03-libraries", "04-process-tree", "05-process-birth", "06-cpu-load", "07-python-threads")
+LABS = ("01-process-inside", "02-debugger", "03-libraries", "04-process-tree", "05-process-birth", "06-cpu-load", "07-python-threads", "08-memory-map", "09-crash")
 PLACEHOLDER = b"sysprog-placeholder"  # метка в заглушках шаблона, у снимка её нет
 IMAGE_START = (b"\x89PNG", b"\xff\xd8\xff")
 
