@@ -1,0 +1,131 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agent",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "139b3be3-dad0-4304-a538-d71740b490b5",
+      "name": "Webhook",
+      "webhookId": "876c8a3f-3e01-4268-b300-528c96ee52bb"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Объясни по-русски, что произошло в системе и нужно ли действие администратора. Событие: {{ JSON.stringify($json.body) }}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        224,
+        0
+      ],
+      "id": "a8fab10c-2369-4e8f-99d2-f6f2de5275d8",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "qwen2.5:3b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmOllama",
+      "typeVersion": 1,
+      "position": [
+        160,
+        208
+      ],
+      "id": "b53259f7-4a9c-40a7-85cd-2ed3144a1389",
+      "name": "Ollama Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "AQ2wXLykmP9jKquD",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "agent@local.test",
+        "toEmail": "me@local.test",
+        "subject": "Агент-сторож: новое событие",
+        "emailFormat": "text",
+        "text": "={{ $json.text }}\n\nСобытие: {{ JSON.stringify($('Webhook').item.json.body) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        592,
+        0
+      ],
+      "id": "411d0c2d-e451-474c-8c73-edfa5ac73650",
+      "name": "Send an Email",
+      "webhookId": "aa6150c0-84d2-449a-95c7-94689eda10aa",
+      "credentials": {
+        "smtp": {
+          "id": "w5sviJYw7lPjL93C",
+          "name": "Unnamed credential"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "f6dcfab5-5742-48fe-b453-d31b4d67c2be",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8c8d8e8e95565e1da9339232c66f959208b3b642cd453a0246c9cf71938a49be"
+  },
+  "nodeGroups": [],
+  "id": "fsYf0zldOxSd87Vz",
+  "tags": []
+}
