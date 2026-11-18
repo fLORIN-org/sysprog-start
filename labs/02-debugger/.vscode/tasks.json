@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "cl /nologo /Zi /Od /W4 debug.c",
+      "group": "build"
+    }
+  ]
+}
