@@ -1,0 +1,23 @@
+{
+  "created": "2026-11-16T14:11:32",
+  "source": "C:\\Users\\user\\Documents\\BackupSystem\\test_data\\documents",
+  "file_count": 4,
+  "files": {
+    "archive/contract.txt": {
+      "size": 56,
+      "sha256": "fefe1c42d6fb91b4bc16f6d9f79cb8096414170ca6756a44a08ec383ad796086"
+    },
+    "notes.txt": {
+      "size": 48,
+      "sha256": "fd72be7a860ed5a66aae73251b5f1a27eec58f28bd3824640a421e29ff65bee5"
+    },
+    "report.txt": {
+      "size": 57,
+      "sha256": "74fb30b877cb8b6bfffeb8dfdaf1f0db712560d7719feff485d34764a17ededd"
+    },
+    "shopping.txt": {
+      "size": 67,
+      "sha256": "50c22ef9c7b3b027e0d335e768fd80c8439dcecadf24333f6dff71a2828fa7e7"
+    }
+  }
+}
